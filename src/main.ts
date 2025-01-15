@@ -1,4 +1,4 @@
-const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const c = canvas.getContext("2d")
 
 const SPACESHIP_WIDTH = 20
@@ -7,6 +7,7 @@ const SPACESHIP_HEIGHT = 50
 const spaceShipState = {
 	x: canvas.width / 2,
 	y: canvas.height - SPACESHIP_HEIGHT - 40,
+	xVelocity: 0,
 }
 
 function drawSpaceship(x: number, y: number) {
@@ -52,11 +53,45 @@ function drawRails() {
 	railsOffset = railsOffset === 10 ? 0 : railsOffset + 2
 }
 
+function moveSpaceshipLeft() {
+	if (spaceShipState.xVelocity > 0) {
+		spaceShipState.xVelocity = 0
+		return
+	}
+	spaceShipState.xVelocity -= 1
+}
+
+function moveSpaceshipRight() {
+	if (spaceShipState.xVelocity < 0) {
+		spaceShipState.xVelocity = 0
+		return
+	}
+	spaceShipState.xVelocity += 1
+}
+
+document.addEventListener('keydown', e => {
+	if (e.key === 'ArrowLeft') {
+		moveSpaceshipLeft()
+	}
+	if (e.key === 'ArrowRight') {
+		moveSpaceshipRight()
+	}
+})
+
+document.addEventListener('click', e => {
+	if (e.clientX < canvas.clientWidth / 2) {
+		moveSpaceshipLeft()
+		return
+	}
+	moveSpaceshipRight()
+})
+
 function runIt() {
 	if (!c) return;
 	// clear canvas
 	c.clearRect(0, 0, canvas.width, canvas.height);
 
+	spaceShipState.x += spaceShipState.xVelocity
 	drawSpaceship(spaceShipState.x, spaceShipState.y)
 
 	drawRails()
