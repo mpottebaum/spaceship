@@ -54,19 +54,11 @@ function drawRails() {
 }
 
 function moveSpaceshipLeft() {
-	if (spaceShipState.xVelocity > 0) {
-		spaceShipState.xVelocity = 0
-		return
-	}
-	spaceShipState.xVelocity -= 1
+	spaceShipState.xVelocity -= 2
 }
 
 function moveSpaceshipRight() {
-	if (spaceShipState.xVelocity < 0) {
-		spaceShipState.xVelocity = 0
-		return
-	}
-	spaceShipState.xVelocity += 1
+	spaceShipState.xVelocity += 2
 }
 
 document.addEventListener('keydown', e => {
@@ -79,7 +71,7 @@ document.addEventListener('keydown', e => {
 })
 
 document.addEventListener('click', e => {
-	if (e.clientX < canvas.clientWidth / 2) {
+	if (e.clientX < window.innerWidth / 2) {
 		moveSpaceshipLeft()
 		return
 	}
@@ -95,6 +87,9 @@ function runIt() {
 	drawSpaceship(spaceShipState.x, spaceShipState.y)
 
 	drawRails()
+
+	if (spaceShipState.xVelocity > 0) spaceShipState.xVelocity -= 0.05
+	if (spaceShipState.xVelocity < 0) spaceShipState.xVelocity += 0.05
 
 	setTimeout(runIt, 1000 / 60);
 }
